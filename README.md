@@ -1,4 +1,4 @@
 fanova
 ======
 
-Functional ANOVA
+Functional ANOVA: an implementation of the ICML 2014 paper "An Efficient Approach for Assessing Hyperparameter Importance"
