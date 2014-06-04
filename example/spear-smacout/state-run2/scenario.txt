@@ -1,0 +1,12 @@
+algo = ruby spear_wrapper.rb
+execdir = example_scenarios/spear
+deterministic = 0
+run_obj = runtime
+overall_obj = mean
+cutoff_time = 5
+cutoff_length = max
+tunerTimeout = 30
+paramfile = example_scenarios/spear/spear-params-mixed.pcs
+instance_file = example_scenarios/spear/instances-train.txt
+test_instance_file = example_scenarios/spear/instances-test.txt
+feature_file = example_scenarios/spear/features.csv

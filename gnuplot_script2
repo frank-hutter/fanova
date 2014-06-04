@@ -1,0 +1,7 @@
+set xtic rotate by -45
+set terminal pdf
+set output "sin.pdf"
+set boxwidth 0.75
+set style fill solid
+plot "/ubc/cs/home/h/hutter/git/fanova/fanova-output/scenario-improvOverNOTHING-quant0.25-n10-sm10-it2147483647/sp-var-dec-heur.marginals" using 3:xtic(2) with boxes fillstyle solid notitle, \
+     '/ubc/cs/home/h/hutter/git/fanova/fanova-output/scenario-improvOverNOTHING-quant0.25-n10-sm10-it2147483647/sp-var-dec-heur.marginals' using 1:3:4 with boxerrorbars fillstyle empty lc rgb 'black' notitle 

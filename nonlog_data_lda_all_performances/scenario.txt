@@ -1,0 +1,11 @@
+algo = .
+execdir = .
+deterministic = 0
+run_obj = qual
+overall_obj = mean
+cutoff_time = 10000000
+cutoff_length = max
+tunerTimeout = 10000000
+paramfile = nonlog_data_lda_all_performances//param-file.txt
+instance_file = nonlog_data_lda_all_performances//instances.txt
+feature_file = nonlog_data_lda_all_performances//instance-features.txt

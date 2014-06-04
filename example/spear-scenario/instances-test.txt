@@ -1,0 +1,5 @@
+instances/qcplin2006.6215.cnf
+instances/qcplin2006.37487.cnf
+instances/qcplin2006.4455.cnf
+instances/qcplin2006.48775.cnf
+instances/qcplin2006.34621.cnf
