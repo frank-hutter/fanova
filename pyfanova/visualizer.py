@@ -6,6 +6,8 @@ Created on Jun 17, 2014
 
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
 import os
 import logging
 
@@ -54,7 +56,50 @@ class Visualizer(object):
         mean, std = zip(*marginals)
         plt.bar(indices, mean, width, color='red', yerr=std)
         plt.xticks(indices+width/2.0, labels)
-        
+
+    def _check_param(self, param):
+        if isinstance(param, int):
+            dim = param
+            param_name = self._fanova.get_config_space().get_parameter_names()[dim]
+        else:
+            assert param in self._fanova.param_name2dmin, "param %s not known" % param
+            dim = self._fanova.param_name2dmin[param]
+            param_name = param
+
+        return (dim, param_name)
+
+    def plot_pairwise_marginal(self, param_1, param_2, lower_bound_1=0, upper_bound_1=1, lower_bound_2=0, upper_bound_2=1, resolution=10):
+
+        dim1, param_name_1 = self._check_param(param_1)
+        dim2, param_name_2 = self._check_param(param_2)
+
+        grid_1 = np.linspace(lower_bound_1, upper_bound_1, resolution)
+        grid_2 = np.linspace(lower_bound_2, upper_bound_2, resolution)
+
+        xx, yy = np.meshgrid(grid_1, grid_2)
+
+        zz = np.zeros([resolution * resolution])
+        for i, x_value in enumerate(grid_1):
+            for j, y_value in enumerate(grid_2):
+                zz[i * resolution + j] = self._fanova._get_marginal_for_value_pair(dim1, dim2, x_value, y_value)[0]
+
+        zz = np.reshape(zz, [resolution, resolution])
+
+        display_grid_1 = [self._fanova.get_config_space().unormalize_value(param_name_1, value) for value in grid_1]
+        display_grid_2 = [self._fanova.get_config_space().unormalize_value(param_name_2, value) for value in grid_2]
+
+        display_xx, display_yy =np.meshgrid(display_grid_1, display_grid_2)
+
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+
+        surface = ax.plot_surface(display_xx, display_yy, zz, rstride=1, cstride=1, cmap=cm.jet, linewidth=0, antialiased=False)
+        ax.set_xlabel(param_name_1)
+        ax.set_ylabel(param_name_2)
+        ax.set_zlabel("Performance")
+        fig.colorbar(surface, shrink=0.5, aspect=5)
+        plt.show()
+        return plt
 
     def plot_marginal(self, param, lower_bound=0, upper_bound=1, is_int=False, resolution=100):
         if isinstance(param, int):
