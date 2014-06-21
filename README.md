@@ -97,7 +97,7 @@ Please make sure, that your csv file has the form
 | 0.3    | 0.4    | ...    | 0.6    |
 
 
-It is also possible to run Fanova on data colleted by HPOlib
+It is also possible to run Fanova on data colleted by [HPOlib](https://github.com/automl/HPOlib)
 ```python
 >>> from fanova_from_hpolib import FanovaFromHPOLib
 >>> f = FanovaFromHPOLib("/path_to_hpolib_data/")
