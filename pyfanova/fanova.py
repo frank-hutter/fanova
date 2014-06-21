@@ -30,12 +30,22 @@ check_java_version()
 
 class Fanova(object):
 
-    def __init__(self, scenario_dir, num_trees=30, split_min=10, seed=42):
+    def __init__(self, scenario_dir, num_trees=30, split_min=10, seed=42,
+        fanova_lib_folder=None,
+        fanova_class_folder=None):
+        """
+
+            fanova_class_folder: used for development purposes only.
+        """
 
         self._remote = FanovaRemote()
 
-        #self._fanova_lib_folder = "/home/domhant/Projects/automl-fanova/fanova/lib"
-        #self._fanova_class_folder = "/home/domhant/Projects/automl-fanova/fanova/bin"
+        if fanova_lib_folder is None:
+            self._fanova_lib_folder = resource_filename("pyfanova", 'fanova')
+        else:
+            self._fanova_lib_folder = fanova_lib_folder
+        #"/home/domhant/Projects/automl-fanova/fanova/bin"
+        self._fanova_class_folder = fanova_class_folder
         self._num_trees = num_trees
         self._split_min = split_min
         self._seed = seed
@@ -218,10 +228,10 @@ class Fanova(object):
         return False
 
     def _fanova_classpath(self):
-        fanova_folder = resource_filename("pyfanova", 'fanova/')
-        classpath = [fname for fname in os.listdir(fanova_folder) if fname.endswith(".jar")]
-        classpath = [os.path.join(fanova_folder, fname) for fname in classpath]
+        classpath = [fname for fname in os.listdir(self._fanova_lib_folder) if fname.endswith(".jar")]
+        classpath = [os.path.join(self._fanova_lib_folder, fname) for fname in classpath]
         classpath = [os.path.abspath(fname) for fname in classpath]
-        #classpath.append(os.path.abspath(self._fanova_class_folder))
+        if self._fanova_class_folder is not None:
+            classpath.append(os.path.abspath(self._fanova_class_folder))
         logging.debug(classpath)
         return classpath
