@@ -76,3 +76,14 @@ At last, all plots can be created together and stored in a directory with
 ```python
 >>> vis.create_all_plots("./plots/")
 ```
+
+If your data is stored in csv file, you can run Fanova with
+```python
+>>> from fanova_from_csv import FanovaFromCSV
+>>> f = FanovaFromCSV("/path_to_data/data.csv")
+```
+It is also possible to run Fanova on data colleted by HPOlib
+```python
+>>> from fanova_from_hpolib import FanovaFromHPOLib
+>>> f = FanovaFromHPOLib("/path_to_hpolib_data/")
+```
