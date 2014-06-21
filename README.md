@@ -68,12 +68,17 @@ We can then plot single marginals by
 >>> plot = vis.plot_marginal("Col1")
 >>> plot.show()
 ```
-![example plots](https://github.com/aaronkl/fanova/blob/master/fanova/example/online_lda/Col1.png)
+what should look like this
+![example plots](https://raw.githubusercontent.com/aaronkl/fanova/master/fanova/example/online_lda/Col1.png)
 
-The same can been than for pairwise marginals
+The same can been done for pairwise marginals
 ```python
 >>> vis.plot_pairwise_marginal("Col0", "Col2")
 ```
+
+![example plots](https://raw.githubusercontent.com/aaronkl/fanova/master/fanova/example/online_lda/pairwise.png)
+
+
 At last, all plots can be created together and stored in a directory with
 ```python
 >>> vis.create_all_plots("./plots/")
