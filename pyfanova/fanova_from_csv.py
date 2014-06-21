@@ -1,16 +1,9 @@
-'''
-Created on Jun 16, 2014
-
-@author: Aaron Klein
-'''
-
-
 import csv
 import logging
 import os
 import shutil
 import numpy as np
-from fanova import Fanova
+from pyfanova.fanova import Fanova
 
 
 class FanovaFromCSV(Fanova):

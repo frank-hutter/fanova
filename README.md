@@ -14,7 +14,7 @@ Installation
 
 
 ```
-pip install fanova
+pip install pyfanova
 ```
 
 
@@ -30,7 +30,7 @@ Example usage
 To run the examples, just start Python console.
 We can then import Fanova and start it by typing
 ```python
->>> from fanova import Fanova
+>>> from pyfanova.fanova import Fanova
 >>> f = Fanova("example/online_lda")
 ```
 This creates a new Fanova object and fits the Random Forest on the specified data set. To compute now the marginal of the first parameter type:
@@ -60,7 +60,7 @@ If we want to compute the mean and standard deviation of a parameter for a certa
 ```
 To visualize the single and pairwise marginals, we have to create a visualizer object first
 ```python
->>> from visualizer import Visualizer
+>>> from pyfanova.visualizer import Visualizer
 >>> vis = Visualizer(f)
 ```
 We can then plot single marginals by 
@@ -86,7 +86,7 @@ At last, all plots can be created together and stored in a directory with
 
 If your data is stored in csv file, you can run Fanova with
 ```python
->>> from fanova_from_csv import FanovaFromCSV
+>>> from pyfanova.fanova_from_csv import FanovaFromCSV
 >>> f = FanovaFromCSV("/path_to_data/data.csv")
 ```
 Please make sure, that your csv file has the form
@@ -99,6 +99,6 @@ Please make sure, that your csv file has the form
 
 It is also possible to run Fanova on data colleted by [HPOlib](https://github.com/automl/HPOlib)
 ```python
->>> from fanova_from_hpolib import FanovaFromHPOLib
+>>> from pyfanova.fanova_from_hpolib import FanovaFromHPOLib
 >>> f = FanovaFromHPOLib("/path_to_hpolib_data/")
 ```
