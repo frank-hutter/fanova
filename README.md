@@ -89,6 +89,14 @@ If your data is stored in csv file, you can run Fanova with
 >>> from fanova_from_csv import FanovaFromCSV
 >>> f = FanovaFromCSV("/path_to_data/data.csv")
 ```
+Please make sure, that your csv file has the form
+
+| X0     | X1     | ...    |  Y     |
+|:-------|:------:|:------:| ------:|
+| 0.1    | 0.2    | ...    | 0.3    |
+| 0.3    | 0.4    | ...    | 0.6    |
+
+
 It is also possible to run Fanova on data colleted by HPOlib
 ```python
 >>> from fanova_from_hpolib import FanovaFromHPOLib
