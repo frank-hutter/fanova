@@ -4,8 +4,8 @@ import os
 import shutil
 import numpy as np
 import pickle
-from fanova import Fanova
-from fanova_remote import FanovaRemote
+from pyfanova.fanova import Fanova
+from pyfanova.fanova_remote import FanovaRemote
 
 
 class FanovaFromHPOLib(Fanova):
@@ -42,7 +42,7 @@ class FanovaFromHPOLib(Fanova):
         super(FanovaFromHPOLib, self).__init__(self._scenario_dir, **kwargs)
 
     def __del__(self):
-        #shutil.rmtree(self._scenario_dir)
+        shutil.rmtree(self._scenario_dir)
         super(FanovaFromHPOLib, self).__del__()
 
     def _load_pkl(self, pkl):
