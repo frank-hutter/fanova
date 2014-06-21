@@ -53,7 +53,7 @@ Again the same can been done by specifing names instead of indices
 >>> f.get_pairwise_marginal("Col0","Col1")
 0.9370525790628655
 ```
-If we want to compute the mean and variance of a parameter for a certain value, we can use
+If we want to compute the mean and standard deviaton of a parameter for a certain value, we can use
 ```python
 >>> f.get_marginal_for_value("Col0", 0.1)
 (1956.6644432031385, 110.58740682895211)
