@@ -65,12 +65,14 @@ To visualize the single and pairwise marginals, we have to create a visualizer o
 ```
 We can then plot single marginals by 
 ```python
->>> plot = vis.plot_marginal(1)
+>>> plot = vis.plot_marginal("Col1")
 >>> plot.show()
 ```
+![example plots](https://github.com/aaronkl/fanova/blob/master/fanova/example/online_lda/Col1.png)
+
 The same can been than for pairwise marginals
 ```python
->>> vis.plot_pairwise_marginal(0, 2)
+>>> vis.plot_pairwise_marginal("Col0", "Col2")
 ```
 At last, all plots can be created together and stored in a directory with
 ```python
