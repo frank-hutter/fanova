@@ -1,9 +1,3 @@
-'''
-Created on Jun 12, 2014
-
-@author: Aaron Klein
-'''
-
 import socket
 import sys
 import logging

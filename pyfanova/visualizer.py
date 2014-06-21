@@ -1,9 +1,3 @@
-'''
-Created on Jun 17, 2014
-
-@author: Aaron Klein
-'''
-
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -43,6 +37,21 @@ class Visualizer(object):
             plt.savefig(outfile_name)
 
 
+    def create_most_important_pairwise_marginal_plots(self, directory, n=20):
+        categorical_parameters = self._fanova.get_config_space().get_categorical_parameters()
+
+        most_important_pairwise_marginals = self._fanova.get_most_important_pairwise_marginals(n)
+        for param1, param2 in most_important_pairwise_marginals:
+            if param1 in categorical_parameters or param2 in categorical_parameters:
+                print "skipping pairwise marginal plot %s x %s, because one of them is categorical" % (param1, param2)
+                continue
+            outfile_name = os.path.join(directory, param1.replace(os.sep, "_") + "x" + param2.replace(os.sep, "_") + ".png")
+            plt.clf()
+            print "creating %s" % outfile_name
+            self.plot_pairwise_marginal(param1, param2).show()
+            plt.savefig(outfile_name)
+
+
     def plot_categorical_marginal(self, param):
         categorical_size = self._fanova.get_config_space().get_categorical_size(param)
 
@@ -68,7 +77,7 @@ class Visualizer(object):
 
         return (dim, param_name)
 
-    def plot_pairwise_marginal(self, param_1, param_2, lower_bound_1=0, upper_bound_1=1, lower_bound_2=0, upper_bound_2=1, resolution=10):
+    def plot_pairwise_marginal(self, param_1, param_2, lower_bound_1=0, upper_bound_1=1, lower_bound_2=0, upper_bound_2=1, resolution=20):
 
         dim1, param_name_1 = self._check_param(param_1)
         dim2, param_name_2 = self._check_param(param_2)
@@ -98,7 +107,6 @@ class Visualizer(object):
         ax.set_ylabel(param_name_2)
         ax.set_zlabel("Performance")
         fig.colorbar(surface, shrink=0.5, aspect=5)
-        plt.show()
         return plt
 
     def plot_marginal(self, param, lower_bound=0, upper_bound=1, is_int=False, resolution=100):
@@ -125,17 +133,6 @@ class Visualizer(object):
         lower_curve = mean - std
         upper_curve = mean + std
 
-        if param_name == "network/lr_policy@inv/power":
-            print mean
-            print std
-            print display_grid
-            print len(mean), len(std), len(display_grid)
-        # if param_name in self._fanova.get_config_space().get_continuous_parameters():
-        #     print ""
-        #     print ""
-        #     print param_name
-        #     print np.diff(display_grid).std()
-        #     print np.diff(np.log(display_grid)).std()
         if np.diff(display_grid).std() > 0.000001 and param_name in self._fanova.get_config_space().get_continuous_parameters():
             #HACK for detecting whether it's a log parameter, because the config space doesn't expose this information
             plt.semilogx(display_grid, mean, 'b')
@@ -147,4 +144,3 @@ class Visualizer(object):
 
         plt.ylabel("Performance")
         return plt
-        #plt.show()

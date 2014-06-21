@@ -4,8 +4,8 @@ Created on Jun 16, 2014
 @author: Aaron Klein
 '''
 
-from fanova import Fanova
-from visualizer import Visualizer
+from pyfanova.fanova import Fanova
+from pyfanova.visualizer import Visualizer
 
 f = Fanova("/home/kleinaa/devel/git/fanova/fanova/example/online_lda")
 

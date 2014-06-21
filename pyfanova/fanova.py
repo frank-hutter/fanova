@@ -1,17 +1,31 @@
-'''
-Created on Jun 12, 2014
-
-@author: Aaron Klein
-'''
-
 import os
 import logging
 import sys
 import socket
 import subprocess
 from subprocess import Popen
-from fanova_remote import FanovaRemote
-from config_space import ConfigSpace
+from pkg_resources import resource_filename
+from pyfanova.fanova_remote import FanovaRemote
+from pyfanova.config_space import ConfigSpace
+
+
+def check_java_version():
+    import re
+    from subprocess import STDOUT, check_output
+    out = check_output(["java", "-version"], stderr=STDOUT).split("\n")
+    if len(out) < 1:
+        print "Failed checking Java version. Make sure Java version 7 or greater is installed."
+        return False
+    m = re.match('java version "\d+.(\d+)..*', out[0])
+    if m is None or len(m.groups()) < 1:
+        print "Failed checking Java version. Make sure Java version 7 or greater is installed."
+        return False
+    java_version = int(m.group(1))
+    if java_version < 7:
+        error_msg = "Found Java version %d, but Java version 7 or greater is required." % java_version
+ 
+        raise RuntimeError(error_msg)
+check_java_version()
 
 
 class Fanova(object):
@@ -20,8 +34,8 @@ class Fanova(object):
 
         self._remote = FanovaRemote()
 
-        self._fanova_lib_folder = "/home/kleinaa/devel/git/fanova/fanova/lib"
-        self._fanova_class_folder = "/home/kleinaa/devel/git/fanova/fanova/bin"
+        #self._fanova_lib_folder = "/home/domhant/Projects/automl-fanova/fanova/lib"
+        #self._fanova_class_folder = "/home/domhant/Projects/automl-fanova/fanova/bin"
         self._num_trees = num_trees
         self._split_min = split_min
         self._seed = seed
@@ -123,6 +137,23 @@ class Fanova(object):
     def get_config_space(self):
         return self._config_space
 
+    def get_all_pairwise_marginals(self):
+        param_names = self._config_space.get_parameter_names()
+        pairwise_marginals = []
+        for i, param_name1 in enumerate(param_names):
+            for j, param_name2 in enumerate(param_names):
+                if i == j:
+                    continue
+                pairwise_marginal_performance = self.get_pairwise_marginal(i, j)
+                pairwise_marginals.append((pairwise_marginal_performance, param_name1, param_name2))
+        return pairwise_marginals
+
+    def get_most_important_pairwise_marginals(self, n=10):
+        pairwise_marginal_performance = self.get_all_pairwise_marginals()
+        pairwise_marginal_performance = sorted(pairwise_marginal_performance, reverse=True)
+        important_pairwise_marginals = [(p1, p2) for marginal, p1, p2  in pairwise_marginal_performance[:n]]
+        return important_pairwise_marginals
+
     def print_all_marginals(self, max_num=20, pairwise=True):
         """
         """
@@ -136,12 +167,9 @@ class Fanova(object):
         print "Sum of fractions for main effects %.2f%%" % (sum(main_marginal_performances))
 
         if pairwise:
+            pairwise_marginal_performance = self.get_all_pairwise_marginals()
             sum_of_pairwise_marginals = 0
-            for i, param_name1 in enumerate(param_names):
-                for j, param_name2 in enumerate(param_names):
-                    if i == j:
-                        continue
-                    pairwise_marginal_performance = self.get_pairwise_marginal(i, j)
+            for pairwise_marginal_performance, param_name1, param_name2 in pairwise_marginal_performance:
                     sum_of_pairwise_marginals += pairwise_marginal_performance
                     label = "%.2f%% due to interaction: %s x %s" % (pairwise_marginal_performance, param_name1, param_name2)
                     labelled_performances.append((pairwise_marginal_performance, label))
@@ -189,11 +217,11 @@ class Fanova(object):
         #the process terminated without ever instantiating a connection...something went wrong
         return False
 
-
     def _fanova_classpath(self):
-        classpath = [fname for fname in os.listdir(self._fanova_lib_folder) if fname.endswith(".jar")]
-        classpath = [os.path.join(self._fanova_lib_folder, fname) for fname in classpath]
+        fanova_folder = resource_filename("pyfanova", 'fanova/')
+        classpath = [fname for fname in os.listdir(fanova_folder) if fname.endswith(".jar")]
+        classpath = [os.path.join(fanova_folder, fname) for fname in classpath]
         classpath = [os.path.abspath(fname) for fname in classpath]
-        classpath.append(os.path.abspath(self._fanova_class_folder))
+        #classpath.append(os.path.abspath(self._fanova_class_folder))
         logging.debug(classpath)
         return classpath
