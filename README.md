@@ -27,18 +27,18 @@ python setup.py install
 Example usage
 -------------
 
-To run the examples, just start Python console
-Fanova can be importet and startet with the command
+To run the examples, just start Python console.
+We can then import Fanova and start it by typing
 ```python
 >>> from fanova import Fanova
 >>> f = Fanova("example/online_lda")
 ```
-this creates a new Fanova object. To compute now the marginal of the first parameter type:
+This creates a new Fanova object and fits the Random Forest on the specified data set. To compute now the marginal of the first parameter type:
 ```python
 >>> f.get_marginal(0)
 5.44551614362
 ```
-Parameters can also be specified by their names:
+Fanova also allows to specify parameters by their names.
 ```python
 >>> f.get_marginal("Col0")
 5.44551614362
@@ -52,4 +52,27 @@ Again the same can been done by specifing names instead of indices
 ```python
 >>> f.get_pairwise_marginal("Col0","Col1")
 0.9370525790628655
+```
+If we want to compute the mean and variance of a parameter for a certain value, we can use
+```python
+>>> f.get_marginal_for_value("Col0", 0.1)
+(1956.6644432031385, 110.58740682895211)
+```
+To visualize the single and pairwise marginals, we have to create a visualizer object first
+```python
+>>> from visualizer import Visualizer
+>>> vis = Visualizer(f)
+```
+We can then plot single marginals by 
+```python
+>>> plot = vis.plot_marginal(1)
+>>> plot.show()
+```
+The same can been than for pairwise marginals
+```python
+>>> vis.plot_pairwise_marginal(0, 2)
+```
+At last, all plots can be created together and stored in a directory with
+```python
+>>> vis.create_all_plots("./plots/")
 ```
