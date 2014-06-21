@@ -11,8 +11,11 @@ f = Fanova("/home/kleinaa/devel/git/fanova/fanova/example/online_lda")
 
 print f.get_marginal(0)
 print f.get_marginal("Col0")
+f.get_pairwise_marginal(0, 1)
+f.get_marginal_for_value(param, value)
 vis = Visualizer(f)
 vis.plot_pairwise_marginal(0, 2)
 vis.create_all_plots("/home/kleinaa/plots/")
-vis.plot_marginal(0)
+p = vis.plot_marginal(0)
+
 vis.plot_marginal(2)
