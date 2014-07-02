@@ -5,7 +5,6 @@ import shutil
 import numpy as np
 import pickle
 from pyfanova.fanova import Fanova
-from pyfanova.fanova_remote import FanovaRemote
 
 
 class FanovaFromHPOLib(Fanova):
@@ -106,7 +105,6 @@ class FanovaFromHPOLib(Fanova):
         fh = open(os.path.join(self._scenario_dir, "param-file.txt"), "w")
         shutil.copyfile(self._param_file,
             os.path.join(self._scenario_dir, "param-file.txt"))
-
 
     def _write_paramstrings_file(self):
         fh = open(os.path.join(self._scenario_dir, "paramstrings.txt"), "w")

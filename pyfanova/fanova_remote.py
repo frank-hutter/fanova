@@ -8,6 +8,7 @@ class FanovaRemote(object):
     TCP_PORT = 5050
     #The size of a udp package
     #note: set in SMAC using --ipc-udp-packetsize
+    SEPARATOR = ','
 
     def __init__(self):
         self.connected = False
@@ -56,3 +57,8 @@ class FanovaRemote(object):
 
         logging.debug("< " + str(data))
         return data
+
+    def send_command(self, cmds):
+        assert not any([FanovaRemote.SEPARATOR in cmd for cmd in cmds]), "%s are not allowed as parameter names" % FanovaRemote.SEPARATOR
+        msg = FanovaRemote.SEPARATOR.join(cmds)
+        self.send(msg)

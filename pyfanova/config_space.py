@@ -54,7 +54,7 @@ class ConfigSpace(object):
         return names
 
     def get_categorical_size(self, parameter):
-        self._remote.send("get_categorical_size:%s" % parameter)
+        self._remote.send_command(["get_categorical_size", str(parameter)])
         result = self._remote.receive().strip()
         if len(result) > 0:
             return int(result)
@@ -62,7 +62,7 @@ class ConfigSpace(object):
             return 0
 
     def get_categorical_values(self, param):
-        self._remote.send("get_categorical_values:%s" % param)
+        self._remote.send_command(["get_categorical_values", str(param)])
         result = self._remote.receive().strip()
         if len(result) > 0:
             values = result.split(';')
@@ -80,7 +80,7 @@ class ConfigSpace(object):
     def unormalize_value(self, parameter, value):
         assert value <= 1 and value >= 0
 
-        self._remote.send("unormalize_value:" + str(parameter) + ":" + str(value))
+        self._remote.send_command("unormalize_value:" + str(parameter) + ":" + str(value))
         value = self._remote.receive()
         if value != "":
             return float(value)
