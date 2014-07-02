@@ -44,7 +44,6 @@ class Fanova(object):
             self._fanova_lib_folder = resource_filename("pyfanova", 'fanova')
         else:
             self._fanova_lib_folder = fanova_lib_folder
-        #"/home/domhant/Projects/automl-fanova/fanova/bin"
         self._fanova_class_folder = fanova_class_folder
         self._num_trees = num_trees
         self._split_min = split_min
