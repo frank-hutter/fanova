@@ -80,7 +80,7 @@ class ConfigSpace(object):
     def unormalize_value(self, parameter, value):
         assert value <= 1 and value >= 0
 
-        self._remote.send_command("unormalize_value:" + str(parameter) + ":" + str(value))
+        self._remote.send_command(["unormalize_value", str(parameter), str(value)])
         value = self._remote.receive()
         if value != "":
             return float(value)
