@@ -27,7 +27,7 @@ python setup.py install
 Example usage
 -------------
 
-To run the examples, just start Python console.
+To run the examples, just download the [data](fanova/example/online_lda.tar.gz) and start the python console.
 We can then import Fanova and start it by typing
 ```python
 >>> from pyfanova.fanova import Fanova
