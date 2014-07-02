@@ -44,7 +44,6 @@ class Fanova(object):
             self._fanova_lib_folder = resource_filename("pyfanova", 'fanova')
         else:
             self._fanova_lib_folder = fanova_lib_folder
-        #"/home/domhant/Projects/automl-fanova/fanova/bin"
         self._fanova_class_folder = fanova_class_folder
         self._num_trees = num_trees
         self._split_min = split_min
@@ -57,7 +56,7 @@ class Fanova(object):
             self._config_space = ConfigSpace(self._remote)
 
             param_names = self._config_space.get_parameter_names()
-            self.param_name2dmin = dict(zip(param_names,range(len(param_names))))
+            self.param_name2dmin = dict(zip(param_names, range(len(param_names))))
         else:
             stdout, stderr = self._process.communicate()
             error_msg = "failed starting fanova "
@@ -83,7 +82,7 @@ class Fanova(object):
         if dim == -1:
             logging.error("Parameter not found")
 
-        self._remote.send("get_marginal:" + str(dim))
+        self._remote.send_command(["get_marginal", str(dim)])
         result = float(self._remote.receive())
 
         return result
@@ -104,7 +103,7 @@ class Fanova(object):
         if dim1 == -1 or dim2 == -1:
             logging.error("Parameters not found")
 
-        self._remote.send("get_pairwise_marginal:" + str(dim1) + ":" + str(dim2))
+        self._remote.send_command(["get_pairwise_marginal", str(dim1), str(dim2)])
         result = float(self._remote.receive())
         return result
 
@@ -123,7 +122,8 @@ class Fanova(object):
     def _get_marginal_for_value(self, param, value):
         dim = self._convert_param2dim(param)
 
-        self._remote.send("get_marginal_for_value:%d:%f" % (dim, value))
+        #self._remote.send_command("get_marginal_for_value:%d:%f" % (dim, value))
+        self._remote.send_command(["get_marginal_for_value", str(dim), str(value)])
         result = self._remote.receive().split(';')
         return (float(result[0]), float(result[1]))
 
@@ -131,7 +131,7 @@ class Fanova(object):
         dim1 = self._convert_param2dim(param1)
         dim2 = self._convert_param2dim(param2)
 
-        self._remote.send("get_marginal_for_value_pair:%d:%d:%f:%f" % (dim1, dim2, value1, value2))
+        self._remote.send_command(["get_marginal_for_value_pair", str(dim1), str(dim2), str(value1), str(value2)])
         result = self._remote.receive().split(';')
         return (float(result[0]), float(result[1]))
 
@@ -169,7 +169,7 @@ class Fanova(object):
         """
         param_names = self._config_space.get_parameter_names()
         num_params = len(param_names)
-        
+
         main_marginal_performances = [self.get_marginal(i) for i in range(num_params)]
         labelled_performances = []
         for marginal, param_name in zip(main_marginal_performances, param_names):
@@ -205,7 +205,7 @@ class Fanova(object):
             ]
         #TODO: check that fanova was started successfully and wasn't killed
         with open(os.devnull, "w") as fnull:
-            #logging.debug(" ".join(cmds))
+            logging.debug(" ".join(cmds))
             if logging.getLogger().level <= logging.DEBUG:
                 self._process = Popen(cmds, stdout=sys.stdout, stderr=sys.stdout)
             else:

@@ -41,8 +41,8 @@ public class FanovaRemote {
 			}
 			String[] commandAndArgs = new String[0];
 			String command;
-			if  (msg.contains(":")) {
-				commandAndArgs = msg.split(":");
+			if  (msg.contains(",")) {
+				commandAndArgs = msg.split(",");
 				command = commandAndArgs[0];
 			} else {
 				command = msg;
