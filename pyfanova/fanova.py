@@ -2,6 +2,7 @@ import os
 import logging
 import sys
 import socket
+import numpy
 import subprocess
 from subprocess import Popen
 from pkg_resources import resource_filename
@@ -23,14 +24,13 @@ def check_java_version():
     java_version = int(m.group(1))
     if java_version < 7:
         error_msg = "Found Java version %d, but Java version 7 or greater is required." % java_version
- 
         raise RuntimeError(error_msg)
 check_java_version()
 
 
 class Fanova(object):
 
-    def __init__(self, scenario_dir, num_trees=30, split_min=10, seed=42,
+    def __init__(self, scenario_dir, num_trees=30, split_min=1, seed=42,
         fanova_lib_folder=None,
         fanova_class_folder=None):
         """
@@ -83,9 +83,12 @@ class Fanova(object):
             logging.error("Parameter not found")
 
         self._remote.send_command(["get_marginal", str(dim)])
-        result = float(self._remote.receive())
-
-        return result
+        #result = float(self._remote.receive())
+        result = self._remote.receive()
+        if result == "":
+            return float('nan')
+        else:
+            return float(result)
 
     def get_pairwise_marginal(self, param1, param2):
         #TODO: Write doc string
@@ -105,7 +108,10 @@ class Fanova(object):
 
         self._remote.send_command(["get_pairwise_marginal", str(dim1), str(dim2)])
         result = float(self._remote.receive())
-        return result
+        if result == "":
+            return float('nan')
+        else:
+            return float(result)
 
     def get_marginal_for_value(self, param, value):
         assert value >= 0 and value <= 1
