@@ -83,7 +83,7 @@ class Fanova(object):
             logging.error("Parameter not found")
 
         self._remote.send_command(["get_marginal", str(dim)])
-        #result = float(self._remote.receive())
+
         result = self._remote.receive()
         if result == "":
             return float('nan')
@@ -158,7 +158,7 @@ class Fanova(object):
         pairwise_marginals = []
         for i, param_name1 in enumerate(param_names):
             for j, param_name2 in enumerate(param_names):
-                if i == j:
+                if i <= j:
                     continue
                 pairwise_marginal_performance = self.get_pairwise_marginal(i, j)
                 pairwise_marginals.append((pairwise_marginal_performance, param_name1, param_name2))
