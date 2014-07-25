@@ -11,8 +11,8 @@ class FanovaFromCSV(Fanova):
     def __init__(self, csv_file, **kwargs):
 
         #TODO: use python tmpdir 
-        self._scenario_dir = "/home/kleinaa/Desktop/tmp_smac_files_2"
-        
+        self._scenario_dir = "tmp_smac_files"
+
         if not os.path.isdir(self._scenario_dir):
             os.mkdir(self._scenario_dir)
 
@@ -27,7 +27,7 @@ class FanovaFromCSV(Fanova):
         super(FanovaFromCSV, self).__init__(self._scenario_dir)
 
     def __del__(self):
-        #shutil.rmtree(self._scenario_dir)
+        shutil.rmtree(self._scenario_dir)
         super(FanovaFromCSV, self).__del__()
 
     def _write_scenario_file(self):
