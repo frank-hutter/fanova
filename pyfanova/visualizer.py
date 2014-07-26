@@ -35,7 +35,6 @@ class Visualizer(object):
             self.plot_marginal(param_name, **kwargs)
             plt.savefig(outfile_name)
 
-
     def create_most_important_pairwise_marginal_plots(self, directory, n=20):
         categorical_parameters = self._fanova.get_config_space().get_categorical_parameters()
 
@@ -50,7 +49,6 @@ class Visualizer(object):
             self.plot_pairwise_marginal(param1, param2).show()
             plt.savefig(outfile_name)
 
-
     def plot_categorical_marginal(self, param):
         categorical_size = self._fanova.get_config_space().get_categorical_size(param)
 
@@ -63,7 +61,7 @@ class Visualizer(object):
         marginals = [self._fanova.get_categorical_marginal_for_value(param, i) for i in range(categorical_size)]
         mean, std = zip(*marginals)
         plt.bar(indices, mean, width, color='red', yerr=std)
-        plt.xticks(indices+width/2.0, labels)
+        plt.xticks(indices + width / 2.0, labels)
 
     def _check_param(self, param):
         if isinstance(param, int):
@@ -96,7 +94,7 @@ class Visualizer(object):
         display_grid_1 = [self._fanova.get_config_space().unormalize_value(param_name_1, value) for value in grid_1]
         display_grid_2 = [self._fanova.get_config_space().unormalize_value(param_name_2, value) for value in grid_2]
 
-        display_xx, display_yy =np.meshgrid(display_grid_1, display_grid_2)
+        display_xx, display_yy = np.meshgrid(display_grid_1, display_grid_2)
 
         fig = plt.figure()
         ax = fig.gca(projection='3d')
