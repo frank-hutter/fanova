@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
 import os
 import logging
 
@@ -97,7 +98,8 @@ class Visualizer(object):
         display_xx, display_yy = np.meshgrid(display_grid_1, display_grid_2)
 
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        #ax = fig.gca(projection='3d')
+        ax = Axes3D(fig)
 
         surface = ax.plot_surface(display_xx, display_yy, zz, rstride=1, cstride=1, cmap=cm.jet, linewidth=0, antialiased=False)
         ax.set_xlabel(param_name_1)
