@@ -122,18 +122,13 @@ public class FunctionalANOVARunner {
 //					System.exit(-1);
 					
 					//=== Set the observations to consider as the mid points between the split points.
-					if( splitPoints.size() == 2 ){
-						// The tree does not split on this dimension => dimension not important.
-						allObservations[dim] = new double[0];
-						allIntervalSizes[dim] = new double[0];
-					} else {
-						allObservations[dim] = new double[splitPoints.size()-1];
-						allIntervalSizes[dim] = new double[splitPoints.size()-1];
-						for(int lowerIntervalId=0; lowerIntervalId<splitPoints.size()-1; lowerIntervalId++){
-							allObservations[dim][lowerIntervalId] = (splitPoints.get(lowerIntervalId) + splitPoints.get(lowerIntervalId+1))/2;
-							allIntervalSizes[dim][lowerIntervalId] = splitPoints.get(lowerIntervalId+1) - splitPoints.get(lowerIntervalId);
+					//=== For dimensions the tree does not split at we still need a single observation to get correct pairwise marginals.
+					allObservations[dim] = new double[splitPoints.size()-1];
+					allIntervalSizes[dim] = new double[splitPoints.size()-1];
+					for(int lowerIntervalId=0; lowerIntervalId<splitPoints.size()-1; lowerIntervalId++){
+						allObservations[dim][lowerIntervalId] = (splitPoints.get(lowerIntervalId) + splitPoints.get(lowerIntervalId+1))/2;
+						allIntervalSizes[dim][lowerIntervalId] = splitPoints.get(lowerIntervalId+1) - splitPoints.get(lowerIntervalId);
 
-						}
 					}
 				}
 			}	
