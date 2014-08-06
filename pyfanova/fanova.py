@@ -171,8 +171,7 @@ class Fanova(object):
         return important_pairwise_marginals
 
     def print_all_marginals(self, max_num=30, pairwise=True):
-        """
-        """
+
         param_names = self._config_space.get_parameter_names()
         num_params = len(param_names)
 
