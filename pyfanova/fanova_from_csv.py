@@ -8,10 +8,12 @@ from pyfanova.fanova import Fanova
 
 class FanovaFromCSV(Fanova):
 
-    def __init__(self, csv_file, **kwargs):
+    def __init__(self, csv_file, bounds, defaults, **kwargs):
 
-        #TODO: use python tmpdir 
+        #TODO: use python tmpdir
         self._scenario_dir = "tmp_smac_files"
+        self._bounds = bounds
+        self._defaults = defaults
 
         if not os.path.isdir(self._scenario_dir):
             os.mkdir(self._scenario_dir)
@@ -71,7 +73,7 @@ class FanovaFromCSV(Fanova):
 
         fh = open(os.path.join(self._scenario_dir, "param-file.txt"), "w")
         for i in xrange(0, self._num_of_params):
-            param_string = "X" + str(i) + " [0, 1] [0.1]\n"
+            param_string = "X" + str(i) + " " + str(self._bounds[i]) + " " + "[" + str(self._defaults[i]) + "]\n"
             fh.write(param_string)
 
         fh.close()
@@ -80,7 +82,13 @@ class FanovaFromCSV(Fanova):
 
         fh = open(os.path.join(self._scenario_dir, "paramstrings.txt"), "w")
         for i in xrange(0, params.shape[0]):
-            line = str(i) + ": " + "X0='" + str(params[i][0]) + "', X1='" + str(params[i][1]) + "'\n"
+            line = str(i) + ": "
+            for j in xrange(0, params.shape[1]):
+                line = line + "X" + str(j) + "='" + str(params[i][j]) + "', "
+            #remove the last comma and whitespace from the string again
+            line = line[:-2]
+            line = line + '\n'
+
             fh.write(line)
         fh.close()
 
@@ -99,6 +107,7 @@ class FanovaFromCSV(Fanova):
         line = fh.readline()
         s = line.split(',')
         self._num_of_params = len(s) - 1
+
         logging.debug("number of parameters: " + str(self._num_of_params))
 
         X = np.zeros([number_of_points, self._num_of_params])
@@ -107,9 +116,9 @@ class FanovaFromCSV(Fanova):
         fh.seek(0)
         rownum = 0
         for line in reader:
-            X[rownum][0] = line[0]
-            X[rownum][1] = line[1]
-            y[rownum] = line[2]
+            for param in xrange(0, self._num_of_params):
+                X[rownum][param] = line[param]
+            y[rownum] = line[-1]
             rownum += 1
 
         fh.close()
