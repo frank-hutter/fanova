@@ -170,7 +170,7 @@ class Fanova(object):
         important_pairwise_marginals = [(p1, p2) for marginal, p1, p2  in pairwise_marginal_performance[:n]]
         return important_pairwise_marginals
 
-    def print_all_marginals(self, max_num=20, pairwise=True):
+    def print_all_marginals(self, max_num=30, pairwise=True):
         """
         """
         param_names = self._config_space.get_parameter_names()
@@ -189,7 +189,7 @@ class Fanova(object):
                     sum_of_pairwise_marginals += pairwise_marginal_performance
                     label = "%.2f%% due to interaction: %s x %s" % (pairwise_marginal_performance, param_name1, param_name2)
                     labelled_performances.append((pairwise_marginal_performance, label))
-            print "Sum of fractions for pairwise interaction effects %.2f%%" % (pairwise_marginal_performance)
+            print "Sum of fractions for pairwise interaction effects %.2f%%" % (sum_of_pairwise_marginals)
 
         sorted_performances = sorted(labelled_performances)
         if max_num is not None:
