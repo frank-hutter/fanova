@@ -87,9 +87,7 @@ At last, all plots can be created together and stored in a directory with
 If your data is stored in csv file, you can run Fanova with
 ```python
 >>> from pyfanova.fanova_from_csv import FanovaFromCSV
->>> bounds = [[0, 1], [0, 1]]
->>> defaults = [0, 0]
->>> f = FanovaFromCSV("/path_to_data/data.csv", bounds, defaults)
+>>> f = FanovaFromCSV("/path_to_data/data.csv")
 ```
 Please make sure, that your csv file has the form
 
