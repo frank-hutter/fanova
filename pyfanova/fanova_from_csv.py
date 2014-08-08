@@ -8,12 +8,9 @@ from pyfanova.fanova import Fanova
 
 class FanovaFromCSV(Fanova):
 
-    def __init__(self, csv_file, bounds, defaults, **kwargs):
+    def __init__(self, csv_file, **kwargs):
 
-        #TODO: use python tmpdir
         self._scenario_dir = "tmp_smac_files"
-        self._bounds = bounds
-        self._defaults = defaults
 
         if not os.path.isdir(self._scenario_dir):
             os.mkdir(self._scenario_dir)
@@ -74,6 +71,7 @@ class FanovaFromCSV(Fanova):
         fh = open(os.path.join(self._scenario_dir, "param-file.txt"), "w")
         for i in xrange(0, self._num_of_params):
             param_string = "X" + str(i) + " " + str(self._bounds[i]) + " " + "[" + str(self._defaults[i]) + "]\n"
+            logging.debug(param_string)
             fh.write(param_string)
 
         fh.close()
@@ -123,4 +121,11 @@ class FanovaFromCSV(Fanova):
 
         fh.close()
 
+        self._bounds = []
+        self._defaults = []
+        for i in xrange(0, self._num_of_params):
+            #Take min and max value as bounds for smac parameter file
+            self._bounds.append([np.min(X[:, i]), np.max(X[:, i])])
+            #Set min value as default value for smac parameter file
+            self._defaults.append(np.min(X[:, i]))
         return X, y
