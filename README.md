@@ -100,5 +100,5 @@ Please make sure, that your csv file has the form
 It is also possible to run Fanova on data colleted by [HPOlib](https://github.com/automl/HPOlib)
 ```python
 >>> from pyfanova.fanova_from_hpolib import FanovaFromHPOLib
->>> f = FanovaFromHPOLib(("params.pcs",["data.pkl"]))
+>>> f = FanovaFromHPOLib("params.pcs",["data.pkl"])
 ```
