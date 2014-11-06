@@ -63,6 +63,9 @@ class Visualizer(object):
         mean, std = zip(*marginals)
         plt.bar(indices, mean, width, color='red', yerr=std)
         plt.xticks(indices + width / 2.0, labels)
+        plt.ylabel("Performance")
+
+        return plt
 
     def _check_param(self, param):
         if isinstance(param, int):
