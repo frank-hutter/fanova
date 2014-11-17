@@ -48,6 +48,7 @@ public class FAnovaExecutor {
 				FAnovaOptions fanovaOpts = new FAnovaOptions();
 				JCommander jcom;
 				;
+				
 				//Manhandle the options to support --restoreScenario
 				args = StateFactoryOptions.processScenarioStateRestore(args);
 				ScenarioOptions scenarioOptions = fanovaOpts.scenOpts;
@@ -114,7 +115,8 @@ public class FAnovaExecutor {
 //
 //				FunctionalANOVAModelBuilderFromCSV famb = new FunctionalANOVAModelBuilderFromCSV();
 //				famb.learnModel(obj.getX(), obj.getY(), fanovaOpts.rfOptions, pool);
-				
+				System.out.println("Split Min");
+				System.out.println(fanovaOpts.rfOptions.splitMin);
 				FunctionalANOVAModelBuilder famb = new FunctionalANOVAModelBuilder();
 				famb.learnModel(instances, rh, configSpace, fanovaOpts.rfOptions, fanovaOpts.mbOptions, scenarioOptions, true, pool);
 				//RandomForest rf = famb. 

@@ -2,6 +2,7 @@ import os
 import logging
 import sys
 import socket
+import numpy
 import subprocess
 from subprocess import Popen
 from pkg_resources import resource_filename
@@ -23,14 +24,13 @@ def check_java_version():
     java_version = int(m.group(1))
     if java_version < 7:
         error_msg = "Found Java version %d, but Java version 7 or greater is required." % java_version
- 
         raise RuntimeError(error_msg)
 check_java_version()
 
 
 class Fanova(object):
 
-    def __init__(self, scenario_dir, num_trees=30, split_min=10, seed=42,
+    def __init__(self, scenario_dir, num_trees=30, split_min=1, seed=42,
         fanova_lib_folder=None,
         fanova_class_folder=None):
         """
@@ -83,9 +83,12 @@ class Fanova(object):
             logging.error("Parameter not found")
 
         self._remote.send_command(["get_marginal", str(dim)])
-        result = float(self._remote.receive())
 
-        return result
+        result = self._remote.receive()
+        if result == "":
+            return float('nan')
+        else:
+            return float(result)
 
     def get_pairwise_marginal(self, param1, param2):
         #TODO: Write doc string
@@ -105,7 +108,10 @@ class Fanova(object):
 
         self._remote.send_command(["get_pairwise_marginal", str(dim1), str(dim2)])
         result = float(self._remote.receive())
-        return result
+        if result == "":
+            return float('nan')
+        else:
+            return float(result)
 
     def get_marginal_for_value(self, param, value):
         assert value >= 0 and value <= 1
@@ -152,7 +158,7 @@ class Fanova(object):
         pairwise_marginals = []
         for i, param_name1 in enumerate(param_names):
             for j, param_name2 in enumerate(param_names):
-                if i == j:
+                if i <= j:
                     continue
                 pairwise_marginal_performance = self.get_pairwise_marginal(i, j)
                 pairwise_marginals.append((pairwise_marginal_performance, param_name1, param_name2))
@@ -164,9 +170,7 @@ class Fanova(object):
         important_pairwise_marginals = [(p1, p2) for marginal, p1, p2  in pairwise_marginal_performance[:n]]
         return important_pairwise_marginals
 
-    def print_all_marginals(self, max_num=20, pairwise=True):
-        """
-        """
+    def print_all_marginals(self, max_num=30, pairwise=True):
         param_names = self._config_space.get_parameter_names()
         num_params = len(param_names)
 
@@ -183,7 +187,7 @@ class Fanova(object):
                     sum_of_pairwise_marginals += pairwise_marginal_performance
                     label = "%.2f%% due to interaction: %s x %s" % (pairwise_marginal_performance, param_name1, param_name2)
                     labelled_performances.append((pairwise_marginal_performance, label))
-            print "Sum of fractions for pairwise interaction effects %.2f%%" % (pairwise_marginal_performance)
+            print "Sum of fractions for pairwise interaction effects %.2f%%" % (sum_of_pairwise_marginals)
 
         sorted_performances = sorted(labelled_performances)
         if max_num is not None:
