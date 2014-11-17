@@ -10,14 +10,6 @@ Fanova requires [Java 7](https://jdk7.java.net/download.html).
 Installation
 ------------
 
-### Pip
-
-
-```
-pip install pyfanova
-```
-
-
 ### Manually
 
 ```
