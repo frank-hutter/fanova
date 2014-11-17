@@ -13,6 +13,8 @@ Installation
 ### Manually
 
 ```
+git clone https://github.com/automl/fanova.git
+cd fanova/
 python setup.py install
 ```
  
